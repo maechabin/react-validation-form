@@ -2,6 +2,12 @@ import React, { PropTypes } from "react";
 import ReactDOM from "react-dom";
 import request from "superagent";
 
+const Dispatcher = require("flux").Dispatcher;
+const EventEmitter = require("events").EventEmitter;
+const assign = require("object-assign");
+
+const formDispatcher = new Dispatcher();
+
 const CheckValue = {
   _checkValue(e) {
     let val = e.target.value;
@@ -12,8 +18,15 @@ const CheckValue = {
 const FormApp = React.createClass({
   getInitialState() {
     return {
-      "mail": null,
-      "tel": null
+      data: {
+        "mail": null,
+        "tel": null
+      },
+      message: {
+        "mail": null,
+        "tel": null
+      },
+      status: false
     };
   },
   checkValue(value) {
@@ -24,11 +37,11 @@ const FormApp = React.createClass({
   },
   render() {
     return (
-      <div>
-        <FormMail mail={this.state.mail} checkValue={this.checkValue} />
-        <FormTel tel={this.state.tel} checkValue={this.checkValue} />
+      <ul>
+        <FormMail mail={this.state.data.mail} error={this.state.message.mail} checkValue={this.checkValue} />
+        <FormTel tel={this.state.data.tel} error={this.state.message.tel} checkValue={this.checkValue} />
         <FormButton sendData={this.sendData} />
-      </div>
+      </ul>
     );
   }
 });
@@ -37,7 +50,10 @@ const FormMail = React.createClass({
   mixins: [CheckValue],
   render() {
     return (
-      <input type="mail" value={this.props.mail} onKeyUp={this._checkValue} required />
+      <li>
+        <input type="mail" value={this.props.mail} onKeyUp={this._checkValue} required />
+        <p>{this.props.error}</p>
+      </li>
     );
   }
 });
@@ -46,20 +62,26 @@ const FormTel = React.createClass({
   mixins: [CheckValue],
   render() {
     return (
-      <input type="tel" value={this.props.tel} onKeyUp={this._checkValue} required />
+      <li>
+        <input type="tel" value={this.props.tel} onKeyUp={this._checkValue} required />
+        <p>{this.props.error}</p>
+      </li>
     );
   }
 });
 
 const FormButton = React.createClass({
-  _sendData() {
+  _sendData(e) {
+    e.preventDefault();
     this.props.sendData();
   },
   render() {
     return (
-      <button onClick={this._sendData}>
-        送信する
-      </button>
+      <li>
+        <button onClick={this._sendData}>
+          送信する
+        </button>
+      </li>
     );
   }
 });
