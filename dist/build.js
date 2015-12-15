@@ -21054,8 +21054,9 @@ var formDispatcher = new Dispatcher();
 
 var CheckValue = {
   _checkValue: function _checkValue(e) {
+    var type = e.target.name;
     var val = e.target.value;
-    this.props.checkValue(val);
+    this.props.checkValue(type, val, e);
   }
 };
 
@@ -21074,8 +21075,21 @@ var FormApp = _react2.default.createClass({
       status: false
     };
   },
-  checkValue: function checkValue(value) {
+  checkValue: function checkValue(type, value, event) {
+    console.log(type);
     console.log(value);
+    console.log(event);
+    switch (type) {
+      case "mail":
+
+        break;
+      case "tel":
+
+        break;
+      default:
+
+        break;
+    }
   },
   sendData: function sendData() {
     console.log(this.state);
@@ -21099,7 +21113,7 @@ var FormMail = _react2.default.createClass({
     return _react2.default.createElement(
       "li",
       null,
-      _react2.default.createElement("input", { type: "mail", value: this.props.mail, onKeyUp: this._checkValue, required: true }),
+      _react2.default.createElement("input", { type: "mail", name: "mail", value: this.props.mail, onKeyUp: this._checkValue, ref: "mail", required: true }),
       _react2.default.createElement(
         "p",
         null,
@@ -21117,7 +21131,7 @@ var FormTel = _react2.default.createClass({
     return _react2.default.createElement(
       "li",
       null,
-      _react2.default.createElement("input", { type: "tel", value: this.props.tel, onKeyUp: this._checkValue, required: true }),
+      _react2.default.createElement("input", { type: "tel", name: "tel", value: this.props.tel, onKeyUp: this._checkValue, ref: "tel", required: true }),
       _react2.default.createElement(
         "p",
         null,
