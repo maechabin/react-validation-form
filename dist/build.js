@@ -21095,11 +21095,21 @@ var FormApp = _react2.default.createClass({
     console.log(this.state);
   },
   render: function render() {
+    var mail = {
+      mail: this.state.data.mail,
+      error: this.state.message.mail,
+      checkValue: this.checkValue
+    };
+    var tel = {
+      tel: this.state.data.tel,
+      error: this.state.message.tel,
+      checkValue: this.checkValue
+    };
     return _react2.default.createElement(
       "ul",
       null,
-      _react2.default.createElement(FormMail, { mail: this.state.data.mail, error: this.state.message.mail, checkValue: this.checkValue }),
-      _react2.default.createElement(FormTel, { tel: this.state.data.tel, error: this.state.message.tel, checkValue: this.checkValue }),
+      _react2.default.createElement(FormMail, mail),
+      _react2.default.createElement(FormTel, tel),
       _react2.default.createElement(FormButton, { sendData: this.sendData })
     );
   }

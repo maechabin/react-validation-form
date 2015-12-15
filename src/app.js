@@ -50,10 +50,20 @@ const FormApp = React.createClass({
     console.log(this.state);
   },
   render() {
+    var mail = {
+      mail: this.state.data.mail,
+      error: this.state.message.mail,
+      checkValue: this.checkValue
+    };
+    var tel = {
+      tel: this.state.data.tel,
+      error: this.state.message.tel,
+      checkValue: this.checkValue
+    };
     return (
       <ul>
-        <FormMail mail={this.state.data.mail} error={this.state.message.mail} checkValue={this.checkValue} />
-        <FormTel tel={this.state.data.tel} error={this.state.message.tel} checkValue={this.checkValue} />
+        <FormMail {...mail} />
+        <FormTel {...tel} />
         <FormButton sendData={this.sendData} />
       </ul>
     );
