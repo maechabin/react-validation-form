@@ -9,10 +9,10 @@ const assign = require("object-assign");
 const formDispatcher = new Dispatcher();
 
 const CheckValue = {
-  _checkValue(e) {
-    let type = e.target.name;
-    let val = e.target.value;
-    this.props.checkValue(type, val, e);
+  _checkValue(event) {
+    let type = event.target.name;
+    let val = event.target.value;
+    this.props.checkValue(type, val, event);
   }
 };
 
@@ -33,10 +33,12 @@ const FormApp = React.createClass({
   checkValue(type, value, event) {
     console.log(type);
     console.log(value);
-    console.log(event);
+    console.log(event.target.validity.valueMissing);
     switch(type) {
       case "mail":
-
+        if (event.target.validity.valueMissing) {
+          this.setState({message: {mail: "入力してください"}});
+        }
         break;
       case "tel":
 
@@ -75,7 +77,7 @@ const FormMail = React.createClass({
   render() {
     return (
       <li>
-        <input type="mail" name="mail" value={this.props.mail} onKeyUp={this._checkValue} ref="mail" required />
+        <input type="mail" name="mail" value={this.props.mail} onChange={this._checkValue} ref="mail" required />
         <p>{this.props.error}</p>
       </li>
     );
@@ -87,7 +89,7 @@ const FormTel = React.createClass({
   render() {
     return (
       <li>
-        <input type="tel" name="tel" value={this.props.tel} onKeyUp={this._checkValue} ref="tel" required />
+        <input type="tel" name="tel" value={this.props.tel} onChange={this._checkValue} ref="tel" required />
         <p>{this.props.error}</p>
       </li>
     );

@@ -21053,10 +21053,10 @@ var assign = require("object-assign");
 var formDispatcher = new Dispatcher();
 
 var CheckValue = {
-  _checkValue: function _checkValue(e) {
-    var type = e.target.name;
-    var val = e.target.value;
-    this.props.checkValue(type, val, e);
+  _checkValue: function _checkValue(event) {
+    var type = event.target.name;
+    var val = event.target.value;
+    this.props.checkValue(type, val, event);
   }
 };
 
@@ -21078,10 +21078,12 @@ var FormApp = _react2.default.createClass({
   checkValue: function checkValue(type, value, event) {
     console.log(type);
     console.log(value);
-    console.log(event);
+    console.log(event.target.validity.valueMissing);
     switch (type) {
       case "mail":
-
+        if (event.target.validity.valueMissing) {
+          this.setState({ message: { mail: "入力してください" } });
+        }
         break;
       case "tel":
 
@@ -21123,7 +21125,7 @@ var FormMail = _react2.default.createClass({
     return _react2.default.createElement(
       "li",
       null,
-      _react2.default.createElement("input", { type: "mail", name: "mail", value: this.props.mail, onKeyUp: this._checkValue, ref: "mail", required: true }),
+      _react2.default.createElement("input", { type: "mail", name: "mail", value: this.props.mail, onChange: this._checkValue, ref: "mail", required: true }),
       _react2.default.createElement(
         "p",
         null,
@@ -21141,7 +21143,7 @@ var FormTel = _react2.default.createClass({
     return _react2.default.createElement(
       "li",
       null,
-      _react2.default.createElement("input", { type: "tel", name: "tel", value: this.props.tel, onKeyUp: this._checkValue, ref: "tel", required: true }),
+      _react2.default.createElement("input", { type: "tel", name: "tel", value: this.props.tel, onChange: this._checkValue, ref: "tel", required: true }),
       _react2.default.createElement(
         "p",
         null,
