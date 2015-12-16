@@ -21084,9 +21084,17 @@ var FormApp = _react2.default.createClass({
         if (event.target.validity.valueMissing) {
           this.setState({ message: { mail: "入力してください" } });
         }
+        if (event.target.validity.typeMismatch) {
+          this.setState({ message: { mail: "ちゃんと入力してください" } });
+        }
         break;
       case "tel":
-
+        if (event.target.validity.valueMissing) {
+          this.setState({ message: { tel: "入力してください" } });
+        }
+        if (event.target.validity.typeMismatch) {
+          this.setState({ message: { tel: "ちゃんと入力してください" } });
+        }
         break;
       default:
 
@@ -21125,7 +21133,7 @@ var FormMail = _react2.default.createClass({
     return _react2.default.createElement(
       "li",
       null,
-      _react2.default.createElement("input", { type: "mail", name: "mail", value: this.props.mail, onChange: this._checkValue, ref: "mail", required: true }),
+      _react2.default.createElement("input", { type: "email", name: "mail", value: this.props.mail, onChange: this._checkValue, ref: "mail", required: true }),
       _react2.default.createElement(
         "p",
         null,
