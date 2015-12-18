@@ -21059,70 +21059,62 @@ var CheckValue = {
     this.props.checkValue(type, val, event);
   }
 };
-
-var data = {};
-var message = {};
-var status = {};
+var ValidStyle = {
+  style: {
+    invalid: {
+      border: "2px solid #b71c1c"
+    },
+    valid: {
+      border: "2px solid #ccc"
+    }
+  }
+};
 
 var FormApp = _react2.default.createClass({
   displayName: "FormApp",
   getInitialState: function getInitialState() {
     return {
       data: {
-        "mail": null,
-        "tel": null
+        mail: null,
+        url: null
       },
       message: {
-        "mail": null,
-        "tel": null
+        mail: null,
+        url: null
       },
       status: {
-        "mail": false,
-        "tel": false
+        mail: null,
+        url: null
       }
     };
   },
   checkValue: function checkValue(type, value, event) {
-    console.log(this.state);
     switch (type) {
       case "mail":
-        this.setState({ message: { mail: null } });
-        if (event.target.validity.typeMismatch) {
-          this.setState({ message: { mail: "正しく入力してください" } });
-          return;
+        this.state.data.mail = value;
+        if (event.target.validationMessage) {
+          this.state.message.mail = event.target.validationMessage;
+          this.state.status.mail = false;
+        } else {
+          this.state.message.mail = null;
+          this.state.status.mail = true;
         }
-        if (event.target.validity.valueMissing) {
-          this.setState({ message: { mail: "入力してください" } });
-          return;
-        }
-        this.setState({
-          data: { mail: value },
-          status: { mail: true }
-        });
         break;
-      case "tel":
-        this.setState({ message: { tel: null } });
-        if (event.target.validity.typeMismatch) {
-          this.setState({ message: { tel: "正しく入力してください" } });
-          return;
+      case "url":
+        this.state.data.url = value;
+        if (event.target.validationMessage) {
+          this.state.message.url = event.target.validationMessage;
+          this.state.status.url = false;
+        } else {
+          this.state.message.url = null;
+          this.state.status.url = true;
         }
-        if (event.target.validity.valueMissing) {
-          this.setState({ message: { tel: "入力してください" } });
-          return;
-        }
-        this.setState({
-          data: { tel: value },
-          status: { tel: true }
-        });
-        break;
-      default:
-
         break;
     }
+    this.setState({});
   },
-  checkButtonState: function checkButtonState() {},
   sendData: function sendData() {
-    console.dir(this.state);
+    alert(this.state.data.mail + ", " + this.state.data.url);
   },
   render: function render() {
     var mail = {
@@ -21130,17 +21122,22 @@ var FormApp = _react2.default.createClass({
       error: this.state.message.mail,
       checkValue: this.checkValue
     };
-    var tel = {
-      tel: this.state.data.tel,
-      error: this.state.message.tel,
+    var url = {
+      url: this.state.data.url,
+      error: this.state.message.url,
       checkValue: this.checkValue
+    };
+    var button = {
+      mail: this.state.status.mail,
+      url: this.state.status.url,
+      sendData: this.sendData
     };
     return _react2.default.createElement(
       "ul",
       null,
       _react2.default.createElement(FormMail, mail),
-      _react2.default.createElement(FormTel, tel),
-      _react2.default.createElement(FormButton, { sendData: this.sendData })
+      _react2.default.createElement(FormUrl, url),
+      _react2.default.createElement(FormButton, button)
     );
   }
 });
@@ -21148,16 +21145,17 @@ var FormApp = _react2.default.createClass({
 var FormMail = _react2.default.createClass({
   displayName: "FormMail",
 
-  mixins: [CheckValue],
+  mixins: [CheckValue, ValidStyle],
   render: function render() {
     return _react2.default.createElement(
       "li",
       null,
-      _react2.default.createElement("input", { type: "email", name: "mail", ref: "mail",
+      _react2.default.createElement("input", { type: "email", name: "mail", ref: "mail", placeholder: "Email",
         value: this.props.mail,
         onChange: this._checkValue,
         onBlur: this._checkValue,
-        required: true
+        required: true,
+        style: this.props.error ? this.style.invalid : this.style.valid
       }),
       _react2.default.createElement(
         "p",
@@ -21168,19 +21166,20 @@ var FormMail = _react2.default.createClass({
   }
 });
 
-var FormTel = _react2.default.createClass({
-  displayName: "FormTel",
+var FormUrl = _react2.default.createClass({
+  displayName: "FormUrl",
 
-  mixins: [CheckValue],
+  mixins: [CheckValue, ValidStyle],
   render: function render() {
     return _react2.default.createElement(
       "li",
       null,
-      _react2.default.createElement("input", { type: "url", name: "tel", ref: "tel",
-        value: this.props.tel,
+      _react2.default.createElement("input", { type: "url", name: "url", ref: "url", placeholder: "URL",
+        value: this.props.url,
         onChange: this._checkValue,
         onBlur: this._checkValue,
-        required: true
+        required: true,
+        style: this.props.error ? this.style.invalid : this.style.valid
       }),
       _react2.default.createElement(
         "p",
@@ -21203,7 +21202,7 @@ var FormButton = _react2.default.createClass({
       null,
       _react2.default.createElement(
         "button",
-        { onClick: this._sendData },
+        { className: "btn btn-cyan800_rsd", onClick: this._sendData, disabled: !this.props.mail === true || !this.props.url === true },
         "送信する"
       )
     );

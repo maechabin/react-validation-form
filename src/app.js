@@ -15,103 +15,99 @@ const CheckValue = {
     this.props.checkValue(type, val, event);
   }
 };
-
-let data = {};
-let message = {};
-let status = {};
+const ValidStyle = {
+  style: {
+    invalid: {
+      border: "2px solid #b71c1c"
+    },
+    valid: {
+      border: "2px solid #ccc"
+    }
+  }
+};
 
 const FormApp = React.createClass({
   getInitialState() {
     return {
       data: {
-        "mail": null,
-        "tel": null
+        mail: null,
+        url: null
       },
       message: {
-        "mail": null,
-        "tel": null
+        mail: null,
+        url: null
       },
       status: {
-        "mail": false,
-        "tel": false
+        mail: null,
+        url: null
       }
     };
   },
   checkValue(type, value, event) {
-    console.log(this.state);
     switch(type) {
       case "mail":
-        this.setState({message: {mail: null}});
-        if (event.target.validity.typeMismatch) {
-          this.setState({message: {mail: "正しく入力してください"}});
-          return;
+        this.state.data.mail = value;
+        if (event.target.validationMessage) {
+          this.state.message.mail = event.target.validationMessage;
+          this.state.status.mail = false;
+        } else {
+          this.state.message.mail = null;
+          this.state.status.mail = true;
         }
-        if (event.target.validity.valueMissing) {
-          this.setState({message: {mail: "入力してください"}});
-          return;
-        }
-        this.setState({
-          data: {mail: value},
-          status: {mail: true}
-        });
         break;
-      case "tel":
-        this.setState({message: {tel: null}});
-        if (event.target.validity.typeMismatch) {
-          this.setState({message: {tel: "正しく入力してください"}});
-          return;
+      case "url":
+        this.state.data.url = value;
+        if (event.target.validationMessage) {
+          this.state.message.url = event.target.validationMessage;
+          this.state.status.url = false;
+        } else {
+          this.state.message.url = null;
+          this.state.status.url = true;
         }
-        if (event.target.validity.valueMissing) {
-          this.setState({message: {tel: "入力してください"}});
-          return;
-        }
-        this.setState({
-          data: {tel: value},
-          status: {tel: true}
-        });
-        break;
-      default:
-
         break;
     }
-  },
-  checkButtonState() {
-
+    this.setState({});
   },
   sendData() {
-    console.dir(this.state);
+    alert(this.state.data.mail + ", " + this.state.data.url);
   },
   render() {
-    var mail = {
+    let mail = {
       mail: this.state.data.mail,
       error: this.state.message.mail,
       checkValue: this.checkValue
     };
-    var tel = {
-      tel: this.state.data.tel,
-      error: this.state.message.tel,
+    let url = {
+      url: this.state.data.url,
+      error: this.state.message.url,
       checkValue: this.checkValue
+    };
+    let button = {
+      mail: this.state.status.mail,
+      url: this.state.status.url,
+      sendData: this.sendData
     };
     return (
       <ul>
         <FormMail {...mail} />
-        <FormTel {...tel} />
-        <FormButton sendData={this.sendData} />
+        <FormUrl {...url} />
+        <FormButton {...button} />
       </ul>
     );
   }
 });
 
 const FormMail = React.createClass({
-  mixins: [CheckValue],
+  mixins: [CheckValue, ValidStyle],
   render() {
     return (
       <li>
-        <input type="email" name="mail" ref="mail"
+        <input type="email" name="mail" ref="mail" placeholder="Email"
           value={this.props.mail}
           onChange={this._checkValue}
           onBlur={this._checkValue}
           required
+          style={(this.props.error) ? this.style.invalid : this.style.valid}
         />
         <p>{this.props.error}</p>
       </li>
@@ -119,16 +115,17 @@ const FormMail = React.createClass({
   }
 });
 
-const FormTel = React.createClass({
-  mixins: [CheckValue],
+const FormUrl = React.createClass({
+  mixins: [CheckValue, ValidStyle],
   render() {
     return (
       <li>
-        <input type="url" name="tel" ref="tel"
-          value={this.props.tel}
+        <input type="url" name="url" ref="url" placeholder="URL"
+          value={this.props.url}
           onChange={this._checkValue}
           onBlur={this._checkValue}
           required
+          style={(this.props.error) ? this.style.invalid : this.style.valid}
         />
         <p>{this.props.error}</p>
       </li>
@@ -144,7 +141,7 @@ const FormButton = React.createClass({
   render() {
     return (
       <li>
-        <button onClick={this._sendData}>
+        <button className="btn btn-cyan800_rsd" onClick={this._sendData} disabled={!this.props.mail === true || !this.props.url === true}>
           送信する
         </button>
       </li>
