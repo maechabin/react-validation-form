@@ -21060,6 +21060,10 @@ var CheckValue = {
   }
 };
 
+var data = {};
+var message = {};
+var status = {};
+
 var FormApp = _react2.default.createClass({
   displayName: "FormApp",
   getInitialState: function getInitialState() {
@@ -21072,37 +21076,53 @@ var FormApp = _react2.default.createClass({
         "mail": null,
         "tel": null
       },
-      status: false
+      status: {
+        "mail": false,
+        "tel": false
+      }
     };
   },
   checkValue: function checkValue(type, value, event) {
-    console.log(type);
-    console.log(value);
-    console.log(event.target.validity.valueMissing);
+    console.log(this.state);
     switch (type) {
       case "mail":
+        this.setState({ message: { mail: null } });
+        if (event.target.validity.typeMismatch) {
+          this.setState({ message: { mail: "正しく入力してください" } });
+          return;
+        }
         if (event.target.validity.valueMissing) {
           this.setState({ message: { mail: "入力してください" } });
+          return;
         }
-        if (event.target.validity.typeMismatch) {
-          this.setState({ message: { mail: "ちゃんと入力してください" } });
-        }
+        this.setState({
+          data: { mail: value },
+          status: { mail: true }
+        });
         break;
       case "tel":
+        this.setState({ message: { tel: null } });
+        if (event.target.validity.typeMismatch) {
+          this.setState({ message: { tel: "正しく入力してください" } });
+          return;
+        }
         if (event.target.validity.valueMissing) {
           this.setState({ message: { tel: "入力してください" } });
+          return;
         }
-        if (event.target.validity.typeMismatch) {
-          this.setState({ message: { tel: "ちゃんと入力してください" } });
-        }
+        this.setState({
+          data: { tel: value },
+          status: { tel: true }
+        });
         break;
       default:
 
         break;
     }
   },
+  checkButtonState: function checkButtonState() {},
   sendData: function sendData() {
-    console.log(this.state);
+    console.dir(this.state);
   },
   render: function render() {
     var mail = {
@@ -21133,7 +21153,12 @@ var FormMail = _react2.default.createClass({
     return _react2.default.createElement(
       "li",
       null,
-      _react2.default.createElement("input", { type: "email", name: "mail", value: this.props.mail, onChange: this._checkValue, ref: "mail", required: true }),
+      _react2.default.createElement("input", { type: "email", name: "mail", ref: "mail",
+        value: this.props.mail,
+        onChange: this._checkValue,
+        onBlur: this._checkValue,
+        required: true
+      }),
       _react2.default.createElement(
         "p",
         null,
@@ -21151,7 +21176,12 @@ var FormTel = _react2.default.createClass({
     return _react2.default.createElement(
       "li",
       null,
-      _react2.default.createElement("input", { type: "tel", name: "tel", value: this.props.tel, onChange: this._checkValue, ref: "tel", required: true }),
+      _react2.default.createElement("input", { type: "url", name: "tel", ref: "tel",
+        value: this.props.tel,
+        onChange: this._checkValue,
+        onBlur: this._checkValue,
+        required: true
+      }),
       _react2.default.createElement(
         "p",
         null,
