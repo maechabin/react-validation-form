@@ -15,6 +15,7 @@ const CheckValue = {
     this.props.checkValue(type, val, event);
   }
 };
+
 const ValidStyle = {
   style: {
     invalid: {
@@ -44,29 +45,45 @@ const FormApp = React.createClass({
     };
   },
   checkValue(type, value, event) {
+    let data = {
+      mail: this.state.data.mail,
+      url: this.state.data.url
+    };
+    let message = {
+      mail: this.state.message.mail,
+      url: this.state.message.url
+    };
+    let status = {
+      mail: this.state.status.mail,
+      url: this.state.status.url
+    };
     switch(type) {
       case "mail":
-        this.state.data.mail = value;
+        data.mail = value;
         if (event.target.validationMessage) {
-          this.state.message.mail = event.target.validationMessage;
-          this.state.status.mail = false;
+          message.mail = event.target.validationMessage;
+          status.mail = false;
         } else {
-          this.state.message.mail = null;
-          this.state.status.mail = true;
+          message.mail = null;
+          status.mail = true;
         }
         break;
       case "url":
-        this.state.data.url = value;
+        data.url = value;
         if (event.target.validationMessage) {
-          this.state.message.url = event.target.validationMessage;
-          this.state.status.url = false;
+          message.url = event.target.validationMessage;
+          status.url = false;
         } else {
-          this.state.message.url = null;
-          this.state.status.url = true;
+          message.url = null;
+          status.url = true;
         }
         break;
     }
-    this.setState({});
+    this.setState({
+      data: data,
+      message: message,
+      status: status
+    });
   },
   sendData() {
     alert(this.state.data.mail + ", " + this.state.data.url);
