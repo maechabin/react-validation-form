@@ -21032,6 +21032,10 @@ process.umask = function() { return 0; };
 },{}],167:[function(require,module,exports){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
@@ -21044,13 +21048,17 @@ var _superagent = require("superagent");
 
 var _superagent2 = _interopRequireDefault(_superagent);
 
+var _flux = require("flux");
+
+var _events = require("events");
+
+var _objectAssign = require("object-assign");
+
+var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Dispatcher = require("flux").Dispatcher;
-var EventEmitter = require("events").EventEmitter;
-var assign = require("object-assign");
-
-var formDispatcher = new Dispatcher();
+var dispatcher = new _flux.Dispatcher();
 
 var CheckValue = {
   _checkValue: function _checkValue(event) {
@@ -21226,7 +21234,7 @@ var FormButton = _react2.default.createClass({
   }
 });
 
-// export default FormApp;
+exports.default = FormApp;
 
 _reactDom2.default.render(_react2.default.createElement(FormApp, null), document.getElementById("content"));
 

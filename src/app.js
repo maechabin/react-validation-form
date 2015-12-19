@@ -1,12 +1,11 @@
 import React, { PropTypes } from "react";
 import ReactDOM from "react-dom";
 import request from "superagent";
+import { Dispatcher } from "flux";
+import { EventEmitter } from "events";
+import assign from "object-assign";
 
-const Dispatcher = require("flux").Dispatcher;
-const EventEmitter = require("events").EventEmitter;
-const assign = require("object-assign");
-
-const formDispatcher = new Dispatcher();
+const dispatcher = new Dispatcher();
 
 const CheckValue = {
   _checkValue(event) {
@@ -166,7 +165,7 @@ const FormButton = React.createClass({
   }
 });
 
-// export default FormApp;
+export default FormApp;
 
 ReactDOM.render(
   <FormApp />,
