@@ -1,11 +1,6 @@
 import React, { PropTypes } from "react";
 import ReactDOM from "react-dom";
 import request from "superagent";
-import { Dispatcher } from "flux";
-import { EventEmitter } from "events";
-import assign from "object-assign";
-
-const dispatcher = new Dispatcher();
 
 const CheckValue = {
   _checkValue(event) {

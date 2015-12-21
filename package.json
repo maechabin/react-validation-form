@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "watchify -t babelify ./src/app.js -o ./dist/build.js"
+    "watch": "watchify -t babelify ./src/app.js -o ./dist/build.js",
+    "w": "watchify -t babelify ./src/flux_app.js -o ./dist/flux_build.js"
   },
   "author": "",
   "license": "MIT License",

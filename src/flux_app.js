@@ -23,63 +23,65 @@ var _value = {
 };
 
 // store
-const FormStore = {
+const FormStore = assign({}, EventEmitter.prototype, {
 
-  getAll: function () {
+  getAll() {
     return _value;
   },
-  dispatcherIndex: formDispatcher.register(function (payload) {
-    if (payload.actionType === "") {
-
+  // イベントを発生させるメソッドの定義
+  emitChange() {
+    this.emit("change");
+  },
+  // イベントの監視（購読）とコールバックの定義
+  addChangeListener(callback) {
+  // "change"イベントの発生を取得したら、引数にセットされたコールバック関数を実行
+    this.on("change", callback);
+  },
+  dispatcherIndex: formDispatcher.register((payload) => {
+    if (payload.actionType === "chackValue") {
+      switch(payload.data.type) {
+        case "mail":
+          _value.data.mail = payload.data.value;
+          if (payload.data.event.target.validationMessage) {
+            _value.message.mail = payload.data.event.target.validationMessage;
+            _value.status.mail = false;
+          } else {
+            _value.message.mail = null;
+            _value.status.mail = true;
+          }
+          break;
+        case "url":
+          _value.data.url = payload.data.value;
+          if (payload.data.event.target.validationMessage) {
+            _value.message.url = payload.data.event.target.validationMessage;
+            _value.status.url = false;
+          } else {
+            _value.message.url = null;
+            _value.status.url = true;
+          }
+          break;
+      }
+      // emitChange()メソッドを実行（イベント発生）
+      FormStore.emitChange();
     }
-  });
-};
+  })
+});
 
 
 //action
 const FormAction = {
 
   checkValue(type, value, event) {
-    let data = {
-      mail: this.state.data.mail,
-      url: this.state.data.url
-    };
-    let message = {
-      mail: this.state.message.mail,
-      url: this.state.message.url
-    };
-    let status = {
-      mail: this.state.status.mail,
-      url: this.state.status.url
-    };
-    switch(type) {
-      case "mail":
-        data.mail = value;
-        if (event.target.validationMessage) {
-          message.mail = event.target.validationMessage;
-          status.mail = false;
-        } else {
-          message.mail = null;
-          status.mail = true;
-        }
-        break;
-      case "url":
-        data.url = value;
-        if (event.target.validationMessage) {
-          message.url = event.target.validationMessage;
-          status.url = false;
-        } else {
-          message.url = null;
-          status.url = true;
-        }
-        break;
-    }
-    this.setState({
-      data: data,
-      message: message,
-      status: status
+    formDispatcher.dispatch({
+      actionType: "chackValue",
+      data: {
+        type: type,
+        value: value,
+        event: event
+      }
     });
   }
+
 };
 
 
@@ -106,6 +108,12 @@ const ValidStyle = {
 const FormApp = React.createClass({
   getInitialState() {
     return FormStore.getAll();
+  },
+  componentDidMount() {
+    let self = this;
+    FormStore.addChangeListener(() => {
+      self.setState(FormStore.getAll());
+    });
   },
   sendData() {
     alert(this.state.data.mail + ", " + this.state.data.url);
