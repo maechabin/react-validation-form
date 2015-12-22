@@ -80,6 +80,10 @@ const FormAction = {
         event: event
       }
     });
+  },
+
+  sendData() {
+    alert(_value.data.mail + ", " + _value.data.url);
   }
 
 };
@@ -114,9 +118,6 @@ const FormApp = React.createClass({
     FormStore.addChangeListener(() => {
       self.setState(FormStore.getAll());
     });
-  },
-  sendData() {
-    alert(this.state.data.mail + ", " + this.state.data.url);
   },
   render() {
     let mail = {
@@ -181,14 +182,17 @@ const FormUrl = React.createClass({
 });
 
 const FormButton = React.createClass({
-  _sendData(e) {
-    e.preventDefault();
-    this.props.sendData();
+  _sendData(event) {
+    event.preventDefault();
+    FormAction.sendData();
   },
   render() {
     return (
       <li>
-        <button className="btn btn-cyan800_rsd" onClick={this._sendData} disabled={!this.props.mail === true || !this.props.url === true}>
+        <button className="btn btn-cyan800_rsd"
+          onClick={this._sendData}
+          disabled={this.props.mail === false || this.props.url === false}
+        >
           送信する
         </button>
       </li>

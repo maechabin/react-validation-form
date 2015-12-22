@@ -21133,6 +21133,9 @@ var FormAction = {
         event: event
       }
     });
+  },
+  sendData: function sendData() {
+    alert(_value.data.mail + ", " + _value.data.url);
   }
 };
 
@@ -21166,9 +21169,6 @@ var FormApp = _react2.default.createClass({
     FormStore.addChangeListener(function () {
       self.setState(FormStore.getAll());
     });
-  },
-  sendData: function sendData() {
-    alert(this.state.data.mail + ", " + this.state.data.url);
   },
   render: function render() {
     var mail = {
@@ -21246,9 +21246,9 @@ var FormUrl = _react2.default.createClass({
 
 var FormButton = _react2.default.createClass({
   displayName: "FormButton",
-  _sendData: function _sendData(e) {
-    e.preventDefault();
-    this.props.sendData();
+  _sendData: function _sendData(event) {
+    event.preventDefault();
+    FormAction.sendData();
   },
   render: function render() {
     return _react2.default.createElement(
@@ -21256,7 +21256,10 @@ var FormButton = _react2.default.createClass({
       null,
       _react2.default.createElement(
         "button",
-        { className: "btn btn-cyan800_rsd", onClick: this._sendData, disabled: !this.props.mail === true || !this.props.url === true },
+        { className: "btn btn-cyan800_rsd",
+          onClick: this._sendData,
+          disabled: this.props.mail === false || this.props.url === false
+        },
         "送信する"
       )
     );

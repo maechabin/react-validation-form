@@ -145,14 +145,17 @@ const FormUrl = React.createClass({
 });
 
 const FormButton = React.createClass({
-  _sendData(e) {
-    e.preventDefault();
+  _sendData(event) {
+    event.preventDefault();
     this.props.sendData();
   },
   render() {
     return (
       <li>
-        <button className="btn btn-cyan800_rsd" onClick={this._sendData} disabled={!this.props.mail === true || !this.props.url === true}>
+        <button className="btn btn-cyan800_rsd"
+          onClick={this._sendData}
+          disabled={this.props.mail === false || this.props.url === false}
+        >
           送信する
         </button>
       </li>
