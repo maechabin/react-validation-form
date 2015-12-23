@@ -1,6 +1,5 @@
 import React, { PropTypes } from "react";
 import ReactDOM from "react-dom";
-import request from "superagent";
 
 const CheckValue = {
   _checkValue(event) {
