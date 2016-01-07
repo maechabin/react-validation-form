@@ -122,18 +122,15 @@ const FormApp = React.createClass({
   render() {
     let mail = {
       mail: this.state.data.mail,
-      error: this.state.message.mail,
-      checkValue: this.checkValue
+      error: this.state.message.mail
     };
     let url = {
       url: this.state.data.url,
-      error: this.state.message.url,
-      checkValue: this.checkValue
+      error: this.state.message.url
     };
     let button = {
       mail: this.state.status.mail,
-      url: this.state.status.url,
-      sendData: this.sendData
+      url: this.state.status.url
     };
     return (
       <ul>
